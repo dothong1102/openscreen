@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../shared/styles.css"><link rel="stylesheet" href="popup.css"><link rel="stylesheet" href="tooltips.css"><title>OpenScreen Studio</title></head>
+<body>
+  <main class="popup-shell">
+    <header>
+      <div class="brand"><img src="../assets/logo.svg" alt=""><span>OpenScreen</span><span class="free-pill">OPEN</span></div>
+      <div class="header-actions"><button class="icon-btn header-icon library-icon" id="library" title="Thư viện" data-tooltip="Thư viện" aria-label="Thư viện"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.75A2.25 2.25 0 0 1 5.75 4.5h4l1.7 2h6.8a2.25 2.25 0 0 1 2.13 3l-2.04 7A2.25 2.25 0 0 1 16.18 18H5.25A2.25 2.25 0 0 1 3.1 15.15l.4-6.4Z"/><path d="M3.85 9.25h16.4"/></svg></button><button class="icon-btn header-icon settings-icon" id="settings" title="Cài đặt" data-tooltip="Cài đặt" aria-label="Cài đặt"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.25 3.7h3.5l.48 2.06c.47.17.91.42 1.3.72l2.02-.64 1.75 3.03-1.53 1.47c.07.25.1.51.1.78s-.03.53-.1.78l1.53 1.47-1.75 3.03-2.02-.64c-.39.3-.83.55-1.3.72l-.48 2.06h-3.5l-.48-2.06c-.47-.17-.91-.42-1.3-.72l-2.02.64-1.75-3.03 1.53-1.47a2.8 2.8 0 0 1 0-1.56L4.7 8.87l1.75-3.03 2.02.64c.39-.3.83-.55 1.3-.72l.48-2.06Z"/><circle cx="12" cy="11" r="2.45"/></svg></button></div>
+    </header>
+    <div class="tabs" role="tablist"><button class="tab active" data-tab="capture">Chụp ảnh</button><button class="tab" data-tab="record">Quay màn hình</button></div>
+
+    <section id="capture-panel" class="panel active">
+      <button class="hero-action" data-action="CAPTURE_VISIBLE"><span class="hero-icon">◫</span><span><b>Vùng đang hiển thị</b><small>Chụp ngay nội dung bạn đang thấy</small></span><kbd>⌃⇧V</kbd></button>
+      <div class="action-grid">
+        <button class="action-card" data-action="CAPTURE_FULL_PAGE"><span>↕</span><b>Toàn trang</b><small>Tự cuộn & ghép ảnh</small></button>
+        <button class="action-card" data-action="SELECT_AREA"><span>⌗</span><b>Chọn vùng</b><small>Kéo thả chính xác</small></button>
+        <button class="action-card" data-action="OPEN_SCREEN_CAPTURE"><span>▣</span><b>Màn hình / cửa sổ</b><small>Mọi ứng dụng</small></button>
+        <button class="action-card delay-action"><span>◷</span><b>Chụp hẹn giờ</b><small><select id="delay"><option value="3">3 giây</option><option value="5">5 giây</option><option value="10">10 giây</option></select></small></button>
+      </div>
+      <button class="import-row" id="importImage"><span>＋</span><b>Chú thích ảnh có sẵn</b><small>Chọn PNG, JPG, WebP hoặc dán ảnh trong editor</small></button>
+      <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+      <div class="quick-settings">
+        <div class="quick-row"><span>Tự mở trình chỉnh sửa</span><label class="switch"><input id="openEditor" type="checkbox" checked><span></span></label></div>
+        <div class="quick-row"><span>Tự copy ảnh sau khi chụp</span><label class="switch"><input id="autoCopyAfterCapture" type="checkbox"><span></span></label></div>
+      </div>
+    </section>
+
+    <section id="record-panel" class="panel">
+      <div class="source-picker">
+        <button class="source active" data-mode="screen"><span>▱</span><b>Màn hình</b><small>Tab, cửa sổ hoặc desktop</small></button>
+        <button class="source" data-mode="camera"><span>●</span><b>Camera</b><small>Camera-only studio</small></button>
+      </div>
+      <p class="privacy-note">Chọn nguồn để mở Studio quay. Tùy chọn microphone, camera, âm thanh và chất lượng nằm trong Studio.</p>
+    </section>
+
+    <footer><span><i></i> Không giới hạn nhân tạo</span><button id="feedback">Phím tắt</button></footer>
+  </main>
+  <script src="../shared/db.js"></script><script src="../shared/utils.js"></script><script src="../shared/i18n.js"></script><script src="popup.js"></script>
+</body>
+</html>

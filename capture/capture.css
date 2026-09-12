@@ -1,0 +1,7 @@
+body { min-height:100vh; display:grid; place-items:center; background:radial-gradient(circle at 50% -20%,#d8d4ff,transparent 48%),#f6f7fb; }
+.capture-card { width:min(520px,calc(100vw - 32px)); padding:28px; text-align:center; }
+.brand { justify-content:center; }.brand img { width:38px;height:38px; }
+.art { height:190px; display:grid; place-items:center; }
+.window { width:250px;height:145px;border-radius:15px;background:linear-gradient(145deg,#635bff,#3f8fea);box-shadow:0 25px 45px #4f57d942;position:relative;padding:14px;text-align:left;transform:rotate(-2deg); }
+.window > span { width:7px;height:7px;border-radius:50%;background:#ffffff88;display:inline-block;margin-right:3px; }.window div { display:grid;place-items:center;height:100px;color:white;font-size:46px; }
+h1 { margin:0;font-size:25px;letter-spacing:-.03em; } p { color:var(--muted);font-size:14px;line-height:1.65;margin:10px auto 20px;max-width:430px; }.btn { padding:13px 19px; }.status { color:var(--muted);font-size:11px;margin-top:16px; }

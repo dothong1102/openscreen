@@ -1,0 +1,9 @@
+/* Once recording starts, the setup panel is hidden and the preview owns the page. */
+.layout.recording-layout{grid-template-columns:minmax(0,1fr);min-height:calc(100vh - 66px);padding:22px clamp(22px,3vw,54px)}
+.layout.recording-layout .stage-area{grid-column:1;min-height:calc(100vh - 110px);justify-content:center;gap:18px}
+.layout.recording-layout .stage{width:min(100%,calc((100vh - 190px)*16 / 9));max-height:none;aspect-ratio:16/9;border-radius:24px;box-shadow:0 28px 70px #1e26394d}
+.layout.recording-layout .controlbar{padding:10px 14px;border-radius:18px;box-shadow:0 15px 36px #1e263924}
+.audio-meter{height:34px;display:flex;align-items:center;gap:7px;padding:0 9px;border-radius:10px;background:#f4f3ff;color:#5a50e9;font-size:10px}.audio-meter>span{font-size:13px;line-height:1;transform:rotate(180deg)}.audio-meter>i{width:58px;height:6px;overflow:hidden;border-radius:99px;background:#dcd9f4}.audio-meter>i>em{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#32cba0,#705dfd,#ff5574);transition:width .07s linear}.audio-meter>b{min-width:23px;color:#655d8d;font-size:9px;font-variant-numeric:tabular-nums}
+.layout.recording-layout .stage-area.done .result{width:min(100%,1500px);grid-template-columns:minmax(0,1.8fr) minmax(310px,.8fr);padding:22px;border-radius:22px;box-shadow:0 25px 60px #1e263930}
+.layout.recording-layout .stage-area.done .result video{max-height:calc(100vh - 155px);object-fit:contain}
+@media(max-width:850px){.layout.recording-layout{padding:15px}.layout.recording-layout .stage-area{min-height:calc(100vh - 96px)}.layout.recording-layout .stage{width:100%;border-radius:17px}}

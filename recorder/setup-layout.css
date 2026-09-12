@@ -1,0 +1,21 @@
+/* Balanced two-column workspace before recording begins. */
+.layout:not(.recording-layout){max-width:1960px;margin:0 auto;grid-template-columns:minmax(350px,390px) minmax(0,1fr);gap:30px;align-items:start;padding:28px clamp(24px,2.5vw,52px)}
+.layout:not(.recording-layout) .setup{position:sticky;top:88px;align-self:start;padding:27px 25px;border-radius:22px;box-shadow:0 18px 48px #313a5917}
+.layout:not(.recording-layout) .setup h1{font-size:22px;line-height:1.15}
+.layout:not(.recording-layout) .setup .lead{font-size:11px;line-height:1.5;margin:8px 0 22px}
+.layout:not(.recording-layout) .setup .field{margin:19px 0}
+.layout:not(.recording-layout) .setup .field:not(.mic-device):not(.device-picker)>label{gap:11px}
+.layout:not(.recording-layout) .setup .field:first-of-type>label{gap:15px;margin-bottom:10px}
+.layout:not(.recording-layout) .setup .segmented button:disabled{cursor:not-allowed;opacity:.42}
+.layout:not(.recording-layout) .setup .toggle-row{padding:14px 0}
+.layout:not(.recording-layout) .setup .toggle-row b{font-size:12px}
+.layout:not(.recording-layout) .setup .toggle-row small{font-size:9.5px}
+.layout:not(.recording-layout) .setup .mic-device,.layout:not(.recording-layout) .setup .device-picker{margin:12px 0 4px;padding:11px 12px;border:1px solid #e7e5ff;border-radius:12px;background:#f8f7ff}
+.layout:not(.recording-layout) .setup .mic-device label,.layout:not(.recording-layout) .setup .device-picker label{font-size:10px}.layout:not(.recording-layout) .setup .mic-device select,.layout:not(.recording-layout) .setup .device-picker select{margin-top:7px;font-size:10px}.layout:not(.recording-layout) .setup .mic-device small,.layout:not(.recording-layout) .setup .device-picker small{display:block;margin-top:7px;font-size:9px;color:var(--muted)}
+.layout:not(.recording-layout) .setup .mic-test{margin-top:11px;padding-top:10px;border-top:1px solid #e5e4f3}.layout:not(.recording-layout) .setup .mic-test>div{display:flex;justify-content:space-between;gap:8px;font-size:9px}.layout:not(.recording-layout) .setup .mic-test b{color:#5a50e9;font-size:9px}.layout:not(.recording-layout) .setup .mic-test i{display:block;height:7px;margin-top:7px;overflow:hidden;border-radius:999px;background:#e7e8f1}.layout:not(.recording-layout) .setup .mic-test em{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#36cfa1,#6d5dfc,#ff5574);transition:width .08s ease-out}.layout:not(.recording-layout) .setup .mic-test small{margin-top:6px}
+.layout:not(.recording-layout) .setup .switch input:disabled+span{opacity:.42;cursor:not-allowed}
+.layout:not(.recording-layout) .setup .split{gap:12px}
+.layout:not(.recording-layout) .setup .start-btn{margin-top:5px;padding:14px}
+.layout:not(.recording-layout) .stage-area{justify-content:flex-start;gap:18px}
+.layout:not(.recording-layout) .stage{max-height:calc(100vh - 124px);border-radius:23px;box-shadow:0 24px 60px #1e263936}
+@media(max-width:850px){.layout:not(.recording-layout){grid-template-columns:1fr;padding:18px}.layout:not(.recording-layout) .setup{position:static;max-width:620px;width:100%;margin:auto}.layout:not(.recording-layout) .stage{max-height:none;border-radius:17px}}

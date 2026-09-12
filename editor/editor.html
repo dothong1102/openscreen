@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../shared/styles.css"><link rel="stylesheet" href="editor.css"><title>Chỉnh sửa ảnh — OpenScreen</title></head>
+<body>
+  <header class="topbar">
+    <div class="brand"><img src="../assets/logo.svg" alt=""><span>OpenScreen</span></div>
+    <input id="name" class="name-input" value="Screenshot" aria-label="Tên ảnh">
+    <div class="top-actions"><button id="undo" class="icon-btn" title="Hoàn tác">↶</button><button id="redo" class="icon-btn" title="Làm lại">↷</button><button id="library" class="btn library-btn">▦ Thư viện</button><button id="copy" class="btn copy-btn" title="Sao chép ảnh để dán vào chat, email hoặc tài liệu">⧉ Copy ảnh</button><button id="share" class="btn">Chia sẻ</button><button id="save" class="btn">Lưu vào thư viện</button><button id="export" class="btn btn-primary">Xuất ảnh ▾</button></div>
+  </header>
+  <aside class="toolbar" aria-label="Công cụ">
+    <button class="tool active" data-tool="select" title="Chọn / di chuyển"><span>↖</span><small>Chọn</small></button>
+    <button class="tool" data-tool="pen"><span>✎</span><small>Bút</small></button>
+    <button class="tool" data-tool="line"><span>╱</span><small>Đường</small></button>
+    <button class="tool" data-tool="arrow"><span>➜</span><small>Mũi tên</small></button>
+    <button class="tool" data-tool="rect"><span>□</span><small>Khung</small></button>
+    <button class="tool" data-tool="ellipse"><span>○</span><small>Tròn</small></button>
+    <button class="tool" data-tool="number"><span>①</span><small>Đánh số</small></button>
+    <button class="tool" data-tool="text"><span>T</span><small>Chữ</small></button>
+    <button class="tool" data-tool="blur"><span>▦</span><small>Làm mờ</small></button>
+    <button class="tool" data-tool="crop"><span>⌗</span><small>Cắt</small></button>
+  </aside>
+  <div class="properties">
+    <label>Màu <input id="color" type="color" value="#ff3b6b"></label>
+    <label>Nét <input id="width" type="range" min="2" max="32" value="6"><output id="widthValue">6</output></label>
+    <span class="divider"></span>
+    <button id="zoomOut" class="icon-btn">−</button><span id="zoomLabel">100%</span><button id="zoomIn" class="icon-btn">+</button><button id="fit" class="btn">Vừa màn hình</button>
+  </div>
+  <main class="workspace" id="workspace"><div class="canvas-wrap"><canvas id="canvas"></canvas></div></main>
+  <div class="export-menu hidden" id="exportMenu">
+    <button data-format="png"><b>PNG</b><span>Chất lượng nguyên bản</span></button>
+    <button data-format="jpg"><b>JPG</b><span>Nhẹ, phù hợp chia sẻ</span></button>
+    <button data-format="pdf"><b>PDF</b><span>Tài liệu một trang</span></button>
+    <button data-format="copy"><b>Sao chép</b><span>Dán vào ứng dụng khác</span></button>
+  </div>
+  <div class="loading" id="loading"><img src="../assets/logo.svg" alt=""><b>Đang mở ảnh…</b></div>
+  <script src="../shared/db.js"></script><script src="../shared/utils.js"></script><script src="../shared/i18n.js"></script><script src="editor.js"></script>
+</body></html>

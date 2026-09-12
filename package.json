@@ -1,0 +1,7 @@
+{
+  "name": "openscreen-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local-first unlimited screenshot and screen recorder Chrome extension",
+  "scripts": { "test": "node scripts/validate.mjs" }
+}

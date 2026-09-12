@@ -1,0 +1,13 @@
+# Internal development hand-off material; it is not part of the public release.
+CHAT_HISTORY.md
+HANDOFF.md
+RESEARCH.md
+
+# Local operating-system and editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Test and development output
+coverage/
+*.log

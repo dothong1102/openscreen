@@ -1,0 +1,8 @@
+/* Desktop editing workspace: use the whole browser page without cropping video. */
+main{max-width:none!important;height:calc(100vh - 66px);grid-template-columns:minmax(0,1fr) minmax(340px,380px)!important;gap:24px;padding:24px clamp(24px,3vw,56px)!important}
+.preview{min-height:0;padding:20px!important;display:flex;flex-direction:column;justify-content:center}
+.video-wrap{width:min(100%,calc((100vh - 190px)*16 / 9));max-height:none!important;align-self:center;border-radius:18px!important;box-shadow:0 22px 55px #11182738}
+.timeline{width:min(100%,calc((100vh - 190px)*16 / 9));align-self:center;padding:18px 6px 3px!important}
+main>aside{align-self:stretch;height:100%;max-height:none;overflow:auto;padding:25px!important;border-radius:20px;display:flex;flex-direction:column}
+main>aside .quality-note{margin-top:auto}
+@media(max-width:850px){main{height:auto;grid-template-columns:1fr!important;padding:18px!important}.preview{display:block}.video-wrap,.timeline{width:100%}main>aside{height:auto;max-height:none;overflow:visible;display:block}}

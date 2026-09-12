@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="../shared/styles.css"><link rel="stylesheet" href="library.css"><link rel="stylesheet" href="recent-marker.css"><title>Thư viện — OpenScreen</title></head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><img src="../assets/logo.svg" alt=""><span>OpenScreen</span></div>
+    <nav><button class="active" data-filter="all"><span>▦</span>Tất cả</button><button data-filter="image"><span>▧</span>Ảnh chụp</button><button data-filter="video"><span>▶</span>Video</button></nav>
+    <div class="storage"><span>Dung lượng local</span><b id="storageText">Đang tính…</b><div><i id="storageBar"></i></div><small>Do trình duyệt quản lý, không có quota cloud.</small></div>
+    <button id="settings" class="settings">⚙ Cài đặt</button>
+  </aside>
+  <main>
+    <header><div><h1>Thư viện của bạn</h1><p>Riêng tư, cục bộ, không cần đăng nhập.</p></div><div class="header-actions"><input id="search" type="search" placeholder="Tìm theo tên…"><button id="capture" class="btn btn-primary">+ Chụp / quay mới</button></div></header>
+    <section class="stats"><article><span>▧</span><div><b id="imageCount">0</b><small>Ảnh chụp</small></div></article><article><span>▶</span><div><b id="videoCount">0</b><small>Video</small></div></article><article><span>∞</span><div><b>Không giới hạn</b><small>Không khóa tính năng</small></div></article></section>
+    <section class="grid" id="grid"></section>
+    <section class="empty hidden" id="empty"><div>✦</div><h2>Chưa có nội dung</h2><p>Chụp trang web hoặc quay màn hình để bắt đầu.</p><button class="btn btn-primary" id="emptyCreate">Tạo nội dung đầu tiên</button></section>
+  </main>
+  <template id="itemTemplate"><article class="media-card"><div class="thumb"><img><video muted preload="metadata"></video><span class="kind"></span><span class="duration"></span><span class="opened-badge hidden">Vừa mở</span></div><div class="card-info"><input class="item-name"><small class="meta"></small><div class="actions"><button data-action="open" class="btn">Mở</button><button data-action="download" class="icon-btn" title="Tải xuống">↓</button><button data-action="delete" class="icon-btn delete" title="Xóa">×</button></div></div></article></template>
+  <script src="../shared/db.js"></script><script src="../shared/utils.js"></script><script src="../shared/i18n.js"></script><script src="library.js"></script>
+</body></html>
