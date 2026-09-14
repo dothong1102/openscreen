@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] — 2026-09-14
+
+### Fixed
+
+- Full-page screenshots now crop browser scrollbar pixels from every captured tile before stitching. This prevents horizontal scrollbar seams from appearing in the final image.
+
 ## [1.0.0] — 2026-09-13
 
 Fresh public baseline containing the complete current OpenScreen Studio experience:

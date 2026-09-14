@@ -182,8 +182,18 @@ async function makeScreenshotBlob(dataUrl, crop, viewport) {
 async function stitchScreenshotSegments(segments, metrics) {
   if (!metrics?.viewportWidth || !metrics?.viewportHeight) throw new Error('Không có kích thước trang để ghép ảnh.');
   const first = await createImageBitmap(await (await fetch(segments[0].dataUrl)).blob());
-  const scaleX = first.width / metrics.viewportWidth;
-  const scaleY = first.height / metrics.viewportHeight;
+  // Chrome captures the complete visual viewport, including classic scrollbars.
+  // Scroll positions, however, use the document viewport (clientWidth/Height).
+  // Crop each tile to that document viewport before drawing it; otherwise the
+  // horizontal scrollbar becomes a visible seam at every tile boundary.
+  const captureWidth = metrics.captureWidth || metrics.viewportWidth;
+  const captureHeight = metrics.captureHeight || metrics.viewportHeight;
+  const captureScaleX = first.width / captureWidth;
+  const captureScaleY = first.height / captureHeight;
+  const sourceWidth = Math.min(first.width, Math.round(metrics.viewportWidth * captureScaleX));
+  const sourceHeight = Math.min(first.height, Math.round(metrics.viewportHeight * captureScaleY));
+  const scaleX = sourceWidth / metrics.viewportWidth;
+  const scaleY = sourceHeight / metrics.viewportHeight;
   const rawWidth = Math.round(metrics.fullWidth * scaleX);
   const rawHeight = Math.round(metrics.fullHeight * scaleY);
   const fit = Math.min(1, 30000 / rawWidth, 30000 / rawHeight, Math.sqrt(160_000_000 / (rawWidth * rawHeight)));
@@ -196,8 +206,10 @@ async function stitchScreenshotSegments(segments, metrics) {
     const image = index === 0 ? first : await createImageBitmap(await (await fetch(segment.dataUrl)).blob());
     const dx = Math.round(segment.x * scaleX * fit);
     const dy = Math.round(segment.y * scaleY * fit);
-    const dw = Math.min(Math.round(image.width * fit), canvas.width - dx);
-    const dh = Math.min(Math.round(image.height * fit), canvas.height - dy);
+    const tileWidth = Math.min(sourceWidth, image.width);
+    const tileHeight = Math.min(sourceHeight, image.height);
+    const dw = Math.min(Math.round(tileWidth * fit), canvas.width - dx);
+    const dh = Math.min(Math.round(tileHeight * fit), canvas.height - dy);
     if (dw > 0 && dh > 0) ctx.drawImage(image, 0, 0, dw / fit, dh / fit, dx, dy, dw, dh);
     image.close?.();
   }

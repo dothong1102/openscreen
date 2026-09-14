@@ -33,7 +33,19 @@
       const style = getComputedStyle(el);
       return (style.position === 'fixed' || style.position === 'sticky') && style.visibility !== 'hidden';
     }).map(el => ({ el, visibility: el.style.visibility }));
-    return { ok: true, fullWidth, fullHeight, viewportWidth: window.innerWidth, viewportHeight: window.innerHeight, originalScroll };
+    // captureVisibleTab includes the browser's scrollbar pixels, whereas
+    // clientWidth/clientHeight describe only the document viewport. Keep both
+    // measurements so the service worker can crop those pixels before stitching.
+    return {
+      ok: true,
+      fullWidth,
+      fullHeight,
+      viewportWidth: root.clientWidth,
+      viewportHeight: root.clientHeight,
+      captureWidth: window.innerWidth,
+      captureHeight: window.innerHeight,
+      originalScroll
+    };
   }
 
   function setFixedVisibility(hidden) {

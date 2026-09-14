@@ -4,10 +4,14 @@
   <header class="topbar">
     <div class="brand"><img src="../assets/logo.svg" alt=""><span>OpenScreen</span></div>
     <input id="name" class="name-input" value="Screenshot" aria-label="Tên ảnh">
-    <div class="top-actions"><button id="undo" class="icon-btn" title="Hoàn tác">↶</button><button id="redo" class="icon-btn" title="Làm lại">↷</button><button id="library" class="btn library-btn">▦ Thư viện</button><button id="copy" class="btn copy-btn" title="Sao chép ảnh để dán vào chat, email hoặc tài liệu">⧉ Copy ảnh</button><button id="share" class="btn">Chia sẻ</button><button id="save" class="btn">Lưu vào thư viện</button><button id="export" class="btn btn-primary">Xuất ảnh ▾</button></div>
+    <div class="top-actions"><button id="library" class="btn library-btn">▦ Thư viện</button><button id="copy" class="btn copy-btn" title="Sao chép ảnh để dán vào chat, email hoặc tài liệu">⧉ Copy ảnh</button><button id="share" class="btn">Chia sẻ</button><button id="save" class="btn">Lưu vào thư viện</button><button id="export" class="btn btn-primary">Xuất ảnh ▾</button></div>
   </header>
   <aside class="toolbar" aria-label="Công cụ">
     <button class="tool active" data-tool="select" title="Chọn / di chuyển"><span>↖</span><small>Chọn</small></button>
+    <span class="toolbar-divider" aria-hidden="true"></span>
+    <button id="undo" class="history-tool" title="Hoàn tác" aria-label="Hoàn tác" disabled><span>↶</span><small>Hoàn tác</small></button>
+    <button id="redo" class="history-tool" title="Làm lại" aria-label="Làm lại" disabled><span>↷</span><small>Làm lại</small></button>
+    <span class="toolbar-divider" aria-hidden="true"></span>
     <button class="tool" data-tool="pen"><span>✎</span><small>Bút</small></button>
     <button class="tool" data-tool="line"><span>╱</span><small>Đường</small></button>
     <button class="tool" data-tool="arrow"><span>➜</span><small>Mũi tên</small></button>

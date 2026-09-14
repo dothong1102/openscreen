@@ -16,6 +16,8 @@ let last = null;
 let previewCanvas = document.createElement('canvas');
 let history = [];
 let future = [];
+let historyPending = 0;
+let historyMoving = false;
 let panning = false;
 let panStart = null;
 let nextMarkerNumber = 1;
@@ -30,16 +32,16 @@ async function init() {
   const image = await createImageBitmap(record.blob);
   canvas.width = image.width; canvas.height = image.height;
   ctx.drawImage(image, 0, 0);
-  previewCanvas.width = canvas.width; previewCanvas.height = canvas.height;
+  syncPreview();
   canvas.style.cursor = 'grab';
   document.querySelector('#loading').classList.add('hidden');
   setTimeout(fitCanvas, 50);
   if (autoCopyAfterCapture) setTimeout(() => copyImage({ automatic: true }), 160);
 }
 
-document.querySelectorAll('.tool').forEach(button => button.addEventListener('click', () => {
+document.querySelectorAll('[data-tool]').forEach(button => button.addEventListener('click', () => {
   tool = button.dataset.tool;
-  document.querySelectorAll('.tool').forEach(el => el.classList.toggle('active', el === button));
+  document.querySelectorAll('[data-tool]').forEach(el => el.classList.toggle('active', el === button));
   canvas.style.cursor = tool === 'select' ? 'grab' : tool === 'text' ? 'text' : 'crosshair';
 }));
 document.querySelector('#width').addEventListener('input', event => document.querySelector('#widthValue').textContent = event.target.value);
@@ -61,7 +63,15 @@ function fitCanvas() { const availableW=workspace.clientWidth-50, availableH=wor
 function point(event) { const rect=canvas.getBoundingClientRect(); return { x:(event.clientX-rect.left)*canvas.width/rect.width, y:(event.clientY-rect.top)*canvas.height/rect.height }; }
 function color(alpha=1) { const hex=document.querySelector('#color').value; if(alpha===1)return hex; const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${alpha})`; }
 function lineWidth() { return Number(document.querySelector('#width').value); }
-function savePreview() { previewCanvas.width=canvas.width; previewCanvas.height=canvas.height; previewCanvas.getContext('2d').drawImage(canvas,0,0); canvas.toBlob(blob => { if(blob){history.push(blob);if(history.length>20)history.shift();future=[];} },'image/png'); }
+function syncPreview() { previewCanvas.width=canvas.width; previewCanvas.height=canvas.height; previewCanvas.getContext('2d').drawImage(canvas,0,0); }
+function updateHistoryControls() { const pending=historyPending>0||historyMoving; document.querySelector('#undo').disabled=pending||!history.at(-1)?.blob; document.querySelector('#redo').disabled=pending||!future.at(-1)?.blob; }
+function canvasBlob(source=canvas) { return new Promise((resolve,reject)=>source.toBlob(blob=>blob?resolve(blob):reject(new Error('Không thể tạo ảnh cho lịch sử chỉnh sửa.')),'image/png')); }
+function savePreview() {
+  syncPreview();
+  const snapshot=document.createElement('canvas');snapshot.width=canvas.width;snapshot.height=canvas.height;snapshot.getContext('2d').drawImage(canvas,0,0);
+  const entry={blob:null,nextMarkerNumber};history.push(entry);if(history.length>20)history.shift();future=[];historyPending+=1;updateHistoryControls();
+  snapshot.toBlob(blob=>{if(blob)entry.blob=blob;else history=history.filter(item=>item!==entry);historyPending-=1;updateHistoryControls();},'image/png');
+}
 function restorePreview() { ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(previewCanvas,0,0); }
 
 canvas.addEventListener('pointerdown', event => {
@@ -79,8 +89,9 @@ canvas.addEventListener('pointerdown', event => {
     nextMarkerNumber += 1;
     return;
   }
-  drawing=true;start=last=point(event);canvas.setPointerCapture(event.pointerId);savePreview();
-  if(tool==='text'){drawing=false;addText(start);}
+  drawing=true;start=last=point(event);canvas.setPointerCapture(event.pointerId);
+  if(tool==='text'){drawing=false;const value=prompt(OpenScreenI18n.t('Nhập nội dung:'));if(value){savePreview();addText(start,value);}return;}
+  savePreview();
 });
 canvas.addEventListener('pointermove', event => {
   if (panning && panStart) {
@@ -148,17 +159,19 @@ function pixelate(a,b){
   const x=Math.max(0,Math.round(Math.min(a.x,b.x))),y=Math.max(0,Math.round(Math.min(a.y,b.y))),w=Math.min(canvas.width-x,Math.round(Math.abs(b.x-a.x))),h=Math.min(canvas.height-y,Math.round(Math.abs(b.y-a.y)));if(w<2||h<2)return;
   const size=Math.max(8,Math.round(lineWidth()*1.5));const data=ctx.getImageData(x,y,w,h);for(let yy=0;yy<h;yy+=size){for(let xx=0;xx<w;xx+=size){const i=((Math.min(h-1,yy+Math.floor(size/2))*w)+Math.min(w-1,xx+Math.floor(size/2)))*4;ctx.fillStyle=`rgb(${data.data[i]},${data.data[i+1]},${data.data[i+2]})`;ctx.fillRect(x+xx,y+yy,Math.min(size,w-xx),Math.min(size,h-yy));}}
 }
-function crop(a,b){const x=Math.round(Math.min(a.x,b.x)),y=Math.round(Math.min(a.y,b.y)),w=Math.round(Math.abs(b.x-a.x)),h=Math.round(Math.abs(b.y-a.y));if(w<5||h<5)return;const temp=document.createElement('canvas');temp.width=w;temp.height=h;temp.getContext('2d').drawImage(canvas,x,y,w,h,0,0,w,h);canvas.width=w;canvas.height=h;ctx.drawImage(temp,0,0);previewCanvas.width=w;previewCanvas.height=h;setTimeout(fitCanvas,20);}
-function addText(p){const value=prompt(OpenScreenI18n.t('Nhập nội dung:'));if(!value)return;ctx.save();ctx.font=`700 ${Math.max(16,lineWidth()*4)}px Inter, sans-serif`;ctx.textBaseline='top';const metrics=ctx.measureText(value);ctx.fillStyle='rgba(255,255,255,.88)';ctx.fillRect(p.x-5,p.y-4,metrics.width+10,Math.max(22,lineWidth()*4+8));ctx.fillStyle=color();ctx.fillText(value,p.x,p.y);ctx.restore();}
+function crop(a,b){const x=Math.round(Math.min(a.x,b.x)),y=Math.round(Math.min(a.y,b.y)),w=Math.round(Math.abs(b.x-a.x)),h=Math.round(Math.abs(b.y-a.y));if(w<5||h<5)return;const temp=document.createElement('canvas');temp.width=w;temp.height=h;temp.getContext('2d').drawImage(canvas,x,y,w,h,0,0,w,h);canvas.width=w;canvas.height=h;ctx.drawImage(temp,0,0);syncPreview();setTimeout(fitCanvas,20);}
+function addText(p,value){ctx.save();ctx.font=`700 ${Math.max(16,lineWidth()*4)}px Inter, sans-serif`;ctx.textBaseline='top';const metrics=ctx.measureText(value);ctx.fillStyle='rgba(255,255,255,.88)';ctx.fillRect(p.x-5,p.y-4,metrics.width+10,Math.max(22,lineWidth()*4+8));ctx.fillStyle=color();ctx.fillText(value,p.x,p.y);ctx.restore();}
 
-async function restoreBlob(blob){const image=await createImageBitmap(blob);canvas.width=image.width;canvas.height=image.height;ctx.drawImage(image,0,0);previewCanvas.width=canvas.width;previewCanvas.height=canvas.height;}
-async function undo(){if(!history.length)return;const current=await new Promise(r=>canvas.toBlob(r,'image/png'));future.push(current);await restoreBlob(history.pop());}
-async function redo(){if(!future.length)return;const current=await new Promise(r=>canvas.toBlob(r,'image/png'));history.push(current);await restoreBlob(future.pop());}
+async function restoreBlob(blob){const image=await createImageBitmap(blob);canvas.width=image.width;canvas.height=image.height;ctx.drawImage(image,0,0);syncPreview();}
+async function undo(){if(historyMoving||historyPending||!history.at(-1)?.blob)return;historyMoving=true;updateHistoryControls();try{const current={blob:await canvasBlob(),nextMarkerNumber};const previous=history.pop();future.push(current);await restoreBlob(previous.blob);nextMarkerNumber=previous.nextMarkerNumber;}finally{historyMoving=false;updateHistoryControls();}}
+async function redo(){if(historyMoving||historyPending||!future.at(-1)?.blob)return;historyMoving=true;updateHistoryControls();try{const current={blob:await canvasBlob(),nextMarkerNumber};const next=future.pop();history.push(current);await restoreBlob(next.blob);nextMarkerNumber=next.nextMarkerNumber;}finally{historyMoving=false;updateHistoryControls();}}
 async function saveCurrent(){const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));record={...record,name:document.querySelector('#name').value.trim()||'Screenshot',width:canvas.width,height:canvas.height,mimeType:'image/png',blob,updatedAt:Date.now()};await OpenScreenDB.save(record);OpenScreen.toast(OpenScreenI18n.t('Đã lưu vào thư viện'));}
 async function copyImage({ automatic = false } = {}){const button=document.querySelector('#copy');const original=button?.textContent;if(button){button.disabled=true;button.textContent=OpenScreenI18n.t(automatic?'Đang tự copy…':'Đang copy…')}try{const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));if(!blob)throw new Error(OpenScreenI18n.t('Không thể tạo ảnh để sao chép.'));await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);OpenScreen.toast(OpenScreenI18n.t(automatic?'Đã tự copy ảnh — bạn có thể dán ngay bằng ⌘V / Ctrl+V.':'Đã copy ảnh — bạn có thể dán ngay bằng ⌘V / Ctrl+V.'));return true}catch(error){console.error(error);OpenScreen.toast(OpenScreenI18n.t(automatic?'Chrome chặn tự copy ảnh. Hãy bấm nút Copy ảnh để thử lại.':'Không thể copy ảnh. Hãy cấp quyền clipboard cho Chrome rồi thử lại.'));return false}finally{if(button){button.disabled=false;button.textContent=original}}}
 async function shareImage(){const blob=await new Promise(r=>canvas.toBlob(r,'image/png')),file=new File([blob],`${document.querySelector('#name').value||'OpenScreen'}.png`,{type:'image/png'});if(navigator.canShare?.({files:[file]})){await navigator.share({title:record.name,files:[file]})}else{await copyImage()}}
 
-document.addEventListener('paste',async event=>{const item=[...event.clipboardData.items].find(i=>i.type.startsWith('image/'));if(!item)return;const blob=item.getAsFile(),image=await createImageBitmap(blob);savePreview();canvas.width=image.width;canvas.height=image.height;ctx.drawImage(image,0,0);previewCanvas.width=canvas.width;previewCanvas.height=canvas.height;fitCanvas();OpenScreen.toast(OpenScreenI18n.t('Đã dán ảnh từ clipboard'))});
+document.addEventListener('paste',async event=>{const item=[...event.clipboardData.items].find(i=>i.type.startsWith('image/'));if(!item)return;const blob=item.getAsFile(),image=await createImageBitmap(blob);savePreview();canvas.width=image.width;canvas.height=image.height;ctx.drawImage(image,0,0);syncPreview();fitCanvas();OpenScreen.toast(OpenScreenI18n.t('Đã dán ảnh từ clipboard'))});
+
+document.addEventListener('keydown',event=>{const target=event.target;if(target?.matches?.('input,textarea,select,[contenteditable="true"]'))return;if(!(event.metaKey||event.ctrlKey)||event.altKey)return;if(event.key.toLowerCase()==='z'){event.preventDefault();if(event.shiftKey)void redo();else void undo();}else if(event.key.toLowerCase()==='y'){event.preventDefault();void redo();}});
 
 async function exportImage(format){document.querySelector('#exportMenu').classList.add('hidden');const base=(document.querySelector('#name').value.trim()||'openscreen').replace(/[\\/:*?"<>|]/g,'-');
   if(format==='copy'){await copyImage();return;}

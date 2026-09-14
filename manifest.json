@@ -2,16 +2,13 @@
   "manifest_version": 3,
   "name": "OpenScreen Studio",
   "short_name": "OpenScreen",
-  "version": "1.0.0",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwtETiTOHDp0zryZYmYqIqUYscDDkolp0XBR6WizpaOStT+YjYDRx8tlxkZOo3SFnWyaE9gyr/IAwWbKhfRXCOhz5s4ofM1/n+Zb1AvuZ8g6ce9Hktvaq7AdzPYVRFcR+cmI+rf9B9/suZXt5SgXRtvJ++MrlWqouMogjJh5rM/Cw85cdE7Ogvx4mbx6u8QDEmATdxNQ8c5uvlz5U480Xfh2etEUyCKwap0hFwfLtNi0ynnAnACpF139UwY61jyKxpEwa67VlLE2rE5M6oMbzCaxuO4STSgRzgFRCiGxfVjZzmgUDGFT29ZnEIzg9xjSWZ6ovTV3gw9mu9Xhol7uS7wIDAQAB",
+  "version": "1.0.1",
   "description": "Unlimited local-first screenshots, annotations and screen recordings. No account, watermark or artificial limits.",
   "minimum_chrome_version": "116",
   "permissions": [
     "activeTab",
     "scripting",
     "storage",
-    "downloads",
-    "tabCapture",
     "clipboardWrite"
   ],
   "background": {

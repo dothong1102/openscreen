@@ -4,7 +4,7 @@
 
 OpenScreen Studio is an independent, open-source Manifest V3 extension built for people who need to capture, explain, and share work without creating an account or sending media to a cloud service. It has no watermark, subscription gate, or extension-imposed recording limit.
 
-> Version 1.0.0 · Requires Google Chrome 116 or later
+> Version 1.0.1 · Requires Google Chrome 116 or later
 
 ## Highlights
 
@@ -44,9 +44,7 @@ You can change shortcut assignments from `chrome://extensions/shortcuts`.
 | Permission | Why it is used |
 | --- | --- |
 | `activeTab`, `scripting` | Capture or select content only after a user initiates an action. |
-| `tabCapture` | Record the current Chrome tab after user confirmation. |
 | `storage` | Persist extension preferences and small metadata. |
-| `downloads` | Download media only when requested. |
 | `clipboardWrite` | Copy a captured image only when requested. |
 
 Camera, microphone, and screen/window access are requested by Chrome at the time the user enables or starts those features.
